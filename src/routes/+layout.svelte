@@ -30,8 +30,6 @@
   let loading = true;
   let error = '';
   let lastUpdated = '';
-
-  // Time of day: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night'
   let timeOfDay: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night' = 'morning';
 
   function getTimeOfDay(): 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night' {
@@ -43,82 +41,41 @@
     return 'night';
   }
 
-  // Theme config per time of day
   const themes = {
     dawn: {
       bg: 'linear-gradient(160deg, #1a0533 0%, #6b2d6b 35%, #f4845f 65%, #ffd580 100%)',
-      orb1: 'rgba(244,132,95,0.35)',
-      orb2: 'rgba(107,45,107,0.3)',
-      orb3: 'rgba(255,213,128,0.25)',
-      textPrimary: '#fff8f0',
-      textSecondary: 'rgba(255,240,220,0.65)',
-      textMuted: 'rgba(255,220,180,0.4)',
-      cardBg: 'rgba(255,255,255,0.08)',
-      cardBorder: 'rgba(255,200,150,0.15)',
-      pillBg: 'rgba(255,255,255,0.08)',
-      accent: '#ffd580',
-      tempColor: '#fff8f0',
-      label: 'Dawn',
+      orb1: 'rgba(244,132,95,0.35)', orb2: 'rgba(107,45,107,0.3)', orb3: 'rgba(255,213,128,0.25)',
+      textPrimary: '#fff8f0', textSecondary: 'rgba(255,240,220,0.65)', textMuted: 'rgba(255,220,180,0.4)',
+      cardBg: 'rgba(255,255,255,0.08)', cardBorder: 'rgba(255,200,150,0.15)', pillBg: 'rgba(255,255,255,0.08)',
+      accent: '#ffd580', tempColor: '#fff8f0', label: 'Dawn',
     },
     morning: {
       bg: 'linear-gradient(160deg, #ffecd2 0%, #fcb69f 30%, #ffeaa7 60%, #dff9fb 100%)',
-      orb1: 'rgba(255,180,100,0.3)',
-      orb2: 'rgba(255,220,120,0.25)',
-      orb3: 'rgba(255,255,200,0.2)',
-      textPrimary: '#2d1b00',
-      textSecondary: 'rgba(60,30,0,0.65)',
-      textMuted: 'rgba(80,40,0,0.45)',
-      cardBg: 'rgba(255,255,255,0.35)',
-      cardBorder: 'rgba(255,180,80,0.25)',
-      pillBg: 'rgba(255,255,255,0.35)',
-      accent: '#e67e00',
-      tempColor: '#2d1b00',
-      label: 'Morning',
+      orb1: 'rgba(255,180,100,0.3)', orb2: 'rgba(255,220,120,0.25)', orb3: 'rgba(255,255,200,0.2)',
+      textPrimary: '#2d1b00', textSecondary: 'rgba(60,30,0,0.65)', textMuted: 'rgba(80,40,0,0.45)',
+      cardBg: 'rgba(255,255,255,0.35)', cardBorder: 'rgba(255,180,80,0.25)', pillBg: 'rgba(255,255,255,0.35)',
+      accent: '#e67e00', tempColor: '#2d1b00', label: 'Morning',
     },
     afternoon: {
-      bg: 'linear-gradient(160deg, #48cae4 0%, #0096c7 30%, #023e8a 70%, #03045e 100%)',
-      orb1: 'rgba(72,202,228,0.3)',
-      orb2: 'rgba(0,150,199,0.25)',
-      orb3: 'rgba(3,4,94,0.4)',
-      textPrimary: '#ffffff',
-      textSecondary: 'rgba(220,240,255,0.7)',
-      textMuted: 'rgba(180,220,255,0.45)',
-      cardBg: 'rgba(255,255,255,0.1)',
-      cardBorder: 'rgba(100,200,255,0.2)',
-      pillBg: 'rgba(255,255,255,0.1)',
-      accent: '#48cae4',
-      tempColor: '#ffffff',
-      label: 'Afternoon',
+      bg: 'linear-gradient(180deg, #74c8f5 0%, #3aaee0 30%, #1a8cc7 60%, #0d5fa0 100%)',
+      orb1: 'rgba(255,255,255,0.18)', orb2: 'rgba(100,200,255,0.15)', orb3: 'rgba(20,120,200,0.2)',
+      textPrimary: '#ffffff', textSecondary: 'rgba(220,245,255,0.75)', textMuted: 'rgba(180,230,255,0.5)',
+      cardBg: 'rgba(255,255,255,0.18)', cardBorder: 'rgba(255,255,255,0.28)', pillBg: 'rgba(255,255,255,0.18)',
+      accent: '#ffffff', tempColor: '#ffffff', label: 'Afternoon',
     },
     evening: {
       bg: 'linear-gradient(160deg, #0d0221 0%, #3d1a6e 25%, #c0392b 55%, #f39c12 80%, #f9ca24 100%)',
-      orb1: 'rgba(243,156,18,0.35)',
-      orb2: 'rgba(192,57,43,0.3)',
-      orb3: 'rgba(61,26,110,0.4)',
-      textPrimary: '#fff8ee',
-      textSecondary: 'rgba(255,235,200,0.65)',
-      textMuted: 'rgba(255,210,150,0.4)',
-      cardBg: 'rgba(255,255,255,0.08)',
-      cardBorder: 'rgba(255,160,60,0.2)',
-      pillBg: 'rgba(255,255,255,0.08)',
-      accent: '#f9ca24',
-      tempColor: '#fff8ee',
-      label: 'Evening',
+      orb1: 'rgba(243,156,18,0.35)', orb2: 'rgba(192,57,43,0.3)', orb3: 'rgba(61,26,110,0.4)',
+      textPrimary: '#fff8ee', textSecondary: 'rgba(255,235,200,0.65)', textMuted: 'rgba(255,210,150,0.4)',
+      cardBg: 'rgba(255,255,255,0.08)', cardBorder: 'rgba(255,160,60,0.2)', pillBg: 'rgba(255,255,255,0.08)',
+      accent: '#f9ca24', tempColor: '#fff8ee', label: 'Evening',
     },
     night: {
       bg: 'linear-gradient(160deg, #03070f 0%, #071628 50%, #0a1628 100%)',
-      orb1: 'rgba(14,80,140,0.22)',
-      orb2: 'rgba(6,50,100,0.18)',
-      orb3: 'rgba(4,30,60,0.25)',
-      textPrimary: '#dce5f0',
-      textSecondary: 'rgba(180,210,240,0.6)',
-      textMuted: 'rgba(120,160,200,0.38)',
-      cardBg: 'rgba(255,255,255,0.04)',
-      cardBorder: 'rgba(255,255,255,0.07)',
-      pillBg: 'rgba(255,255,255,0.04)',
-      accent: '#4fc3f7',
-      tempColor: '#ffffff',
-      label: 'Night',
+      orb1: 'rgba(14,80,140,0.22)', orb2: 'rgba(6,50,100,0.18)', orb3: 'rgba(4,30,60,0.25)',
+      textPrimary: '#dce5f0', textSecondary: 'rgba(180,210,240,0.6)', textMuted: 'rgba(120,160,200,0.38)',
+      cardBg: 'rgba(255,255,255,0.04)', cardBorder: 'rgba(255,255,255,0.07)', pillBg: 'rgba(255,255,255,0.04)',
+      accent: '#4fc3f7', tempColor: '#ffffff', label: 'Night',
     },
   };
 
@@ -129,7 +86,16 @@
   $: isEvening = timeOfDay === 'evening';
   $: isAfternoon = timeOfDay === 'afternoon';
 
-  // ── Weather helpers ──
+  // Afternoon cloud layers — each has a different size, speed, opacity, y position
+  const afternoonClouds = [
+    { id: 1, y: 6,  w: 260, h: 70,  speed: 38, opacity: 0.92, delay: 0   },
+    { id: 2, y: 18, w: 180, h: 52,  speed: 55, opacity: 0.75, delay: -12 },
+    { id: 3, y: 10, w: 320, h: 80,  speed: 62, opacity: 0.6,  delay: -25 },
+    { id: 4, y: 28, w: 140, h: 44,  speed: 44, opacity: 0.5,  delay: -8  },
+    { id: 5, y: 4,  w: 200, h: 60,  speed: 70, opacity: 0.4,  delay: -35 },
+    { id: 6, y: 22, w: 240, h: 65,  speed: 50, opacity: 0.65, delay: -18 },
+  ];
+
   function getWeatherLabel(code: number): string {
     if (code === 0) return 'Clear Sky';
     if (code <= 2) return 'Partly Cloudy';
@@ -207,7 +173,6 @@
     return `${base} L ${w} ${h} L 0 ${h} Z`;
   }
 
-  // City search
   let searchQuery = '';
   let searchResults: any[] = [];
   let searchLoading = false;
@@ -235,7 +200,6 @@
     await fetchWeatherData();
   }
 
-  // ── Fetch ──
   async function fetchWeatherData() {
     loading = true; error = '';
     timeOfDay = getTimeOfDay();
@@ -287,9 +251,7 @@
         windSpeed: Math.round((fd.daily.windspeed_10m_max[i+1] / 3.6) * 10) / 10,
         weatherCode: fd.daily.weathercode[i+1],
         uvIndex: Math.round(fd.daily.uv_index_max[i+1] ?? 0),
-        sunrise: fd.daily.sunrise[i+1],
-        sunset: fd.daily.sunset[i+1],
-        isDay: 1,
+        sunrise: fd.daily.sunrise[i+1], sunset: fd.daily.sunset[i+1], isDay: 1,
       }));
 
       history = hd.daily.time.slice(0, -1).map((date: string, i: number) => ({
@@ -321,16 +283,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </svelte:head>
 
-<div class="app" class:light={isLight} class:night={isNight} style="background:{theme.bg}; --text-primary:{theme.textPrimary}; --text-secondary:{theme.textSecondary}; --text-muted:{theme.textMuted}; --card-bg:{theme.cardBg}; --card-border:{theme.cardBorder}; --pill-bg:{theme.pillBg}; --accent:{theme.accent}; --temp-color:{theme.tempColor}; --orb1:{theme.orb1}; --orb2:{theme.orb2}; --orb3:{theme.orb3};">
+<div class="app"
+  class:is-afternoon={isAfternoon}
+  class:is-morning={isLight}
+  class:is-night={isNight}
+  class:is-dawn={isDawn}
+  class:is-evening={isEvening}
+  style="background:{theme.bg}; --text-primary:{theme.textPrimary}; --text-secondary:{theme.textSecondary}; --text-muted:{theme.textMuted}; --card-bg:{theme.cardBg}; --card-border:{theme.cardBorder}; --pill-bg:{theme.pillBg}; --accent:{theme.accent}; --temp-color:{theme.tempColor}; --orb1:{theme.orb1}; --orb2:{theme.orb2}; --orb3:{theme.orb3};">
 
-  <!-- Animated background orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <!-- Orbs (non-afternoon) -->
+  {#if !isAfternoon}
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  {/if}
+
   <div class="grain"></div>
 
+  <!-- ══ AFTERNOON: sky + animated clouds ══ -->
+  {#if isAfternoon}
+    <!-- Top sun halo -->
+    <div class="aft-sun-halo"></div>
+
+    <!-- Cloud layers -->
+    <div class="clouds-stage" aria-hidden="true">
+      {#each afternoonClouds as cloud}
+        <div
+          class="cloud-wrap"
+          style="
+            top:{cloud.y}%;
+            animation-duration:{cloud.speed}s;
+            animation-delay:{cloud.delay}s;
+            opacity:{cloud.opacity};
+          "
+        >
+          <!-- Each cloud is built from overlapping ellipses for a fluffy look -->
+          <svg
+            viewBox="0 0 {cloud.w} {cloud.h}"
+            width="{cloud.w}"
+            height="{cloud.h}"
+            style="overflow:visible"
+          >
+            <defs>
+              <linearGradient id="cg{cloud.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="white" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#d6eeff" stop-opacity="0.85"/>
+              </linearGradient>
+              <filter id="cshadow{cloud.id}">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(30,100,180,0.15)"/>
+              </filter>
+            </defs>
+            <g filter="url(#cshadow{cloud.id})">
+              <!-- Base puff -->
+              <ellipse cx="{cloud.w*0.5}" cy="{cloud.h*0.72}" rx="{cloud.w*0.45}" ry="{cloud.h*0.3}" fill="url(#cg{cloud.id})"/>
+              <!-- Left bump -->
+              <ellipse cx="{cloud.w*0.25}" cy="{cloud.h*0.55}" rx="{cloud.w*0.2}" ry="{cloud.h*0.32}" fill="url(#cg{cloud.id})"/>
+              <!-- Center top bump -->
+              <ellipse cx="{cloud.w*0.48}" cy="{cloud.h*0.38}" rx="{cloud.w*0.26}" ry="{cloud.h*0.38}" fill="url(#cg{cloud.id})"/>
+              <!-- Right bump -->
+              <ellipse cx="{cloud.w*0.72}" cy="{cloud.h*0.52}" rx="{cloud.w*0.22}" ry="{cloud.h*0.3}" fill="url(#cg{cloud.id})"/>
+              <!-- Far right small -->
+              <ellipse cx="{cloud.w*0.88}" cy="{cloud.h*0.65}" rx="{cloud.w*0.14}" ry="{cloud.h*0.24}" fill="url(#cg{cloud.id})"/>
+            </g>
+          </svg>
+        </div>
+      {/each}
+    </div>
+
+    <!-- Bottom sky fade -->
+    <div class="aft-bottom-fade"></div>
+  {/if}
+
   <!-- Morning sun rays -->
-  {#if timeOfDay === 'morning' || timeOfDay === 'dawn'}
+  {#if isLight || isDawn}
     <div class="sun-rays" aria-hidden="true">
       {#each Array(12) as _, i}
         <div class="ray" style="transform:rotate({i*30}deg);animation-delay:{i*0.15}s"></div>
@@ -352,7 +377,7 @@
     <div class="horizon-glow" aria-hidden="true"></div>
   {/if}
 
-  <!-- Rain particles -->
+  <!-- Rain -->
   {#if current && (getWeatherType(current.weatherCode) === 'rain' || getWeatherType(current.weatherCode) === 'drizzle')}
     <div class="rain-wrap" aria-hidden="true">
       {#each Array(28) as _, i}
@@ -428,13 +453,11 @@
       <!-- HERO -->
       <div class="hero">
         <div class="hero-icon">
-          <!-- Morning / Dawn → big bright sun -->
           {#if (timeOfDay === 'morning' || timeOfDay === 'dawn') && getWeatherType(current.weatherCode) === 'clear'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
               <defs>
                 <radialGradient id="mornSun" cx="50%" cy="45%" r="55%">
-                  <stop offset="0%" stop-color="#fffde7"/>
-                  <stop offset="40%" stop-color="#ffd54f"/>
+                  <stop offset="0%" stop-color="#fffde7"/><stop offset="40%" stop-color="#ffd54f"/>
                   <stop offset="100%" stop-color="{timeOfDay==='dawn'?'#f4845f':'#fb8c00'}"/>
                 </radialGradient>
                 <filter id="mornGlow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -448,89 +471,78 @@
               </g>
             </svg>
 
-          <!-- Afternoon → high sharp sun -->
           {:else if timeOfDay === 'afternoon' && getWeatherType(current.weatherCode) === 'clear'}
+            <!-- Afternoon: crisp white-gold high sun -->
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
               <defs>
                 <radialGradient id="aftSun" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stop-color="#ffffff"/>
-                  <stop offset="30%" stop-color="#fff9c4"/>
-                  <stop offset="100%" stop-color="#fdd835"/>
+                  <stop offset="25%" stop-color="#fffde7"/>
+                  <stop offset="100%" stop-color="#ffe082"/>
                 </radialGradient>
-                <filter id="aftGlow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="aftGlow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               </defs>
               <g filter="url(#aftGlow)">
-                {#each Array(12) as _, i}
-                  <line x1="80" y1="{i%2===0?16:20}" x2="80" y2="6" stroke="#fff9c4" stroke-width="{i%2===0?4:2.5}" stroke-linecap="round" transform="rotate({i*30} 80 80)" opacity="{i%2===0?1:0.6}"/>
+                <!-- Outer halo -->
+                <circle cx="80" cy="80" r="52" fill="white" opacity="0.08"/>
+                <circle cx="80" cy="80" r="42" fill="white" opacity="0.1"/>
+                {#each Array(16) as _, i}
+                  <line x1="80" y1="{i%2===0?16:21}" x2="80" y2="6"
+                    stroke="white" stroke-width="{i%2===0?3.5:2}"
+                    stroke-linecap="round" transform="rotate({i*22.5} 80 80)"
+                    opacity="{i%2===0?0.95:0.5}"/>
                 {/each}
-                <circle cx="80" cy="80" r="44" fill="url(#aftSun)" opacity="0.15"/>
-                <circle cx="80" cy="80" r="32" fill="url(#aftSun)"/>
+                <circle cx="80" cy="80" r="30" fill="url(#aftSun)"/>
               </g>
             </svg>
 
-          <!-- Evening → low orange sun -->
+          {:else if timeOfDay === 'afternoon' && getWeatherType(current.weatherCode) === 'partly-cloudy'}
+            <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
+              <defs>
+                <radialGradient id="pcAft"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#ffe082"/></radialGradient>
+                <filter id="pcAftGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g filter="url(#pcAftGlow)">
+                <circle cx="55" cy="65" r="24" fill="url(#pcAft)" opacity="0.9"/>
+                {#each Array(8) as _,i}<line x1="55" y1="{37-(i%2)*3}" x2="55" y2="28" stroke="white" stroke-width="2.5" stroke-linecap="round" transform="rotate({i*45} 55 65)" opacity="{i%2===0?0.9:0.4}"/>{/each}
+              </g>
+              <ellipse cx="100" cy="98" rx="35" ry="22" fill="rgba(255,255,255,0.7)"/>
+              <ellipse cx="75" cy="104" rx="24" ry="18" fill="rgba(255,255,255,0.75)"/>
+              <ellipse cx="88" cy="90" rx="28" ry="22" fill="white" opacity="0.95"/>
+              <ellipse cx="108" cy="96" rx="22" ry="17" fill="rgba(255,255,255,0.7)"/>
+            </svg>
+
           {:else if timeOfDay === 'evening' && getWeatherType(current.weatherCode) === 'clear'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
               <defs>
-                <radialGradient id="eveSun" cx="50%" cy="60%" r="55%">
-                  <stop offset="0%" stop-color="#fff3e0"/>
-                  <stop offset="40%" stop-color="#ff8f00"/>
-                  <stop offset="100%" stop-color="#e64a19"/>
-                </radialGradient>
+                <radialGradient id="eveSun" cx="50%" cy="60%" r="55%"><stop offset="0%" stop-color="#fff3e0"/><stop offset="40%" stop-color="#ff8f00"/><stop offset="100%" stop-color="#e64a19"/></radialGradient>
                 <filter id="eveGlow"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               </defs>
               <g filter="url(#eveGlow)">
-                {#each Array(10) as _, i}
-                  <line x1="80" y1="22" x2="80" y2="8" stroke="#ff8f00" stroke-width="3.5" stroke-linecap="round" transform="rotate({i*36} 80 80)" opacity="0.6"/>
-                {/each}
+                {#each Array(10) as _, i}<line x1="80" y1="22" x2="80" y2="8" stroke="#ff8f00" stroke-width="3.5" stroke-linecap="round" transform="rotate({i*36} 80 80)" opacity="0.6"/>{/each}
                 <circle cx="80" cy="80" r="46" fill="url(#eveSun)" opacity="0.2"/>
                 <circle cx="80" cy="80" r="32" fill="url(#eveSun)"/>
               </g>
             </svg>
 
-          <!-- Night → moon -->
           {:else if isNight && getWeatherType(current.weatherCode) === 'clear'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
-              <defs>
-                <radialGradient id="moonG" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#fffde7"/><stop offset="60%" stop-color="#fff9c4"/><stop offset="100%" stop-color="#f9a825"/></radialGradient>
-                <filter id="moonGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              </defs>
-              <g filter="url(#moonGlow)">
-                <circle cx="80" cy="80" r="40" fill="url(#moonG)" opacity="0.15"/>
-                <path d="M80 44 A36 36 0 1 0 80 116 A28 28 0 1 1 80 44Z" fill="url(#moonG)"/>
-              </g>
+              <defs><radialGradient id="moonG" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#fffde7"/><stop offset="60%" stop-color="#fff9c4"/><stop offset="100%" stop-color="#f9a825"/></radialGradient><filter id="moonGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+              <g filter="url(#moonGlow)"><circle cx="80" cy="80" r="40" fill="url(#moonG)" opacity="0.15"/><path d="M80 44 A36 36 0 1 0 80 116 A28 28 0 1 1 80 44Z" fill="url(#moonG)"/></g>
             </svg>
 
-          <!-- Partly cloudy -->
           {:else if getWeatherType(current.weatherCode) === 'partly-cloudy'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
-              <defs>
-                <radialGradient id="pcSun" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#fff9c4"/><stop offset="100%" stop-color="{isLight?'#ff8f00':'#ffb300'}"/></radialGradient>
-                <linearGradient id="pcCloud" x1="0%" y1="0%" x2="15%" y2="100%"><stop offset="0%" stop-color="{isLight?'#e3f2fd':'#cfd8dc'}"/><stop offset="100%" stop-color="{isLight?'#90caf9':'#78909c'}"/></linearGradient>
-                <filter id="pcShadow"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(0,80,150,0.25)"/></filter>
-              </defs>
-              <circle cx="55" cy="65" r="24" fill="url(#pcSun)"/>
-              {#each Array(8) as _,i}
-                <line x1="55" y1="{37-(i%2)*3}" x2="55" y2="28" stroke="#ffd54f" stroke-width="2.5" stroke-linecap="round" transform="rotate({i*45} 55 65)" opacity="{i%2===0?1:0.45}"/>
-              {/each}
-              <g filter="url(#pcShadow)">
-                <ellipse cx="100" cy="98" rx="35" ry="22" fill="url(#pcCloud)"/>
-                <ellipse cx="75" cy="104" rx="24" ry="18" fill="url(#pcCloud)"/>
-                <ellipse cx="88" cy="90" rx="28" ry="22" fill="{isLight?'white':'rgba(255,255,255,0.9)'}"/>
-                <ellipse cx="108" cy="96" rx="22" ry="17" fill="url(#pcCloud)"/>
-              </g>
+              <defs><radialGradient id="sg2" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#fff9c4"/><stop offset="100%" stop-color="#ffb300"/></radialGradient><linearGradient id="cg2" x1="0%" y1="0%" x2="20%" y2="100%"><stop offset="0%" stop-color="#e3f2fd"/><stop offset="100%" stop-color="#90caf9"/></linearGradient><filter id="csh"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(0,80,150,0.3)"/></filter></defs>
+              <circle cx="55" cy="65" r="22" fill="url(#sg2)"/>
+              {#each Array(8) as _,i}<line x1="55" y1="{38-(i%2)*3}" x2="55" y2="30" stroke="#ffd54f" stroke-width="2.5" stroke-linecap="round" transform="rotate({i*45} 55 65)" opacity="{i%2===0?1:0.45}"/>{/each}
+              <g filter="url(#csh)"><ellipse cx="100" cy="98" rx="35" ry="22" fill="url(#cg2)"/><ellipse cx="75" cy="104" rx="24" ry="18" fill="url(#cg2)"/><ellipse cx="88" cy="90" rx="28" ry="22" fill="white" opacity="0.9"/><ellipse cx="108" cy="96" rx="22" ry="17" fill="url(#cg2)"/></g>
             </svg>
 
-          <!-- Rain -->
           {:else if getWeatherType(current.weatherCode) === 'rain' || getWeatherType(current.weatherCode) === 'drizzle'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
               <defs><linearGradient id="rcg" x1="0%" y1="0%" x2="10%" y2="100%"><stop offset="0%" stop-color="#546e7a"/><stop offset="100%" stop-color="#263238"/></linearGradient><filter id="rsh"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,50,100,0.35)"/></filter></defs>
-              <g filter="url(#rsh)">
-                <ellipse cx="95" cy="72" rx="38" ry="23" fill="url(#rcg)" opacity="0.6"/>
-                <ellipse cx="66" cy="78" rx="27" ry="19" fill="url(#rcg)"/>
-                <ellipse cx="80" cy="66" rx="32" ry="25" fill="#455a64" opacity="0.95"/>
-                <ellipse cx="104" cy="74" rx="24" ry="18" fill="url(#rcg)"/>
-              </g>
+              <g filter="url(#rsh)"><ellipse cx="95" cy="72" rx="38" ry="23" fill="url(#rcg)" opacity="0.6"/><ellipse cx="66" cy="78" rx="27" ry="19" fill="url(#rcg)"/><ellipse cx="80" cy="66" rx="32" ry="25" fill="#455a64" opacity="0.95"/><ellipse cx="104" cy="74" rx="24" ry="18" fill="url(#rcg)"/></g>
               {#each [[52,102],[66,110],[80,102],[94,110],[108,102],[66,122],[80,130],[94,122]] as [x,y],i}
                 <ellipse cx={x} cy={y} rx="3" ry="6" fill="#64b5f6" opacity="0.85">
                   <animate attributeName="cy" values="{y};{y+14};{y+14}" dur="{0.7+i*0.09}s" repeatCount="indefinite"/>
@@ -539,31 +551,17 @@
               {/each}
             </svg>
 
-          <!-- Thunder -->
           {:else if getWeatherType(current.weatherCode) === 'thunder'}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
               <defs><linearGradient id="thcg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#37474f"/><stop offset="100%" stop-color="#102027"/></linearGradient><filter id="lglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-              <ellipse cx="95" cy="68" rx="40" ry="24" fill="url(#thcg)"/>
-              <ellipse cx="65" cy="75" rx="28" ry="20" fill="url(#thcg)"/>
-              <ellipse cx="80" cy="62" rx="34" ry="26" fill="#455a64"/>
-              <ellipse cx="106" cy="72" rx="26" ry="20" fill="url(#thcg)"/>
-              <g filter="url(#lglow)">
-                <polygon points="85,94 72,118 82,118 68,146 100,108 88,108 98,94" fill="#ffd600">
-                  <animate attributeName="opacity" values="1;0.3;1;0.7;1" dur="2.2s" repeatCount="indefinite"/>
-                </polygon>
-              </g>
+              <ellipse cx="95" cy="68" rx="40" ry="24" fill="url(#thcg)"/><ellipse cx="65" cy="75" rx="28" ry="20" fill="url(#thcg)"/><ellipse cx="80" cy="62" rx="34" ry="26" fill="#455a64"/><ellipse cx="106" cy="72" rx="26" ry="20" fill="url(#thcg)"/>
+              <g filter="url(#lglow)"><polygon points="85,94 72,118 82,118 68,146 100,108 88,108 98,94" fill="#ffd600"><animate attributeName="opacity" values="1;0.3;1;0.7;1" dur="2.2s" repeatCount="indefinite"/></polygon></g>
             </svg>
 
-          <!-- Cloud / default -->
           {:else}
             <svg viewBox="0 0 160 160" width="145" height="145" class="anim-float">
-              <defs><linearGradient id="cldg" x1="0%" y1="0%" x2="15%" y2="100%"><stop offset="0%" stop-color="{isLight?'#e3f2fd':'#cfd8dc'}"/><stop offset="100%" stop-color="{isLight?'#90caf9':'#78909c'}"/></linearGradient><filter id="csh2"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.2)"/></filter></defs>
-              <g filter="url(#csh2)">
-                <ellipse cx="95" cy="88" rx="38" ry="24" fill="url(#cldg)" opacity="0.5"/>
-                <ellipse cx="66" cy="95" rx="28" ry="20" fill="url(#cldg)"/>
-                <ellipse cx="80" cy="82" rx="32" ry="26" fill="{isLight?'white':'#eceff1'}" opacity="0.95"/>
-                <ellipse cx="104" cy="92" rx="25" ry="19" fill="url(#cldg)"/>
-              </g>
+              <defs><linearGradient id="cldg" x1="0%" y1="0%" x2="15%" y2="100%"><stop offset="0%" stop-color="{isLight||isAfternoon?'#e3f2fd':'#cfd8dc'}"/><stop offset="100%" stop-color="{isLight||isAfternoon?'#90caf9':'#78909c'}"/></linearGradient><filter id="csh2"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.2)"/></filter></defs>
+              <g filter="url(#csh2)"><ellipse cx="95" cy="88" rx="38" ry="24" fill="url(#cldg)" opacity="0.5"/><ellipse cx="66" cy="95" rx="28" ry="20" fill="url(#cldg)"/><ellipse cx="80" cy="82" rx="32" ry="26" fill="white" opacity="0.95"/><ellipse cx="104" cy="92" rx="25" ry="19" fill="url(#cldg)"/></g>
             </svg>
           {/if}
         </div>
@@ -612,12 +610,12 @@
           <svg viewBox="0 0 320 60" preserveAspectRatio="none" width="100%" height="60">
             <defs>
               <linearGradient id="sparkG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="{theme.accent}" stop-opacity="0.35"/>
-                <stop offset="100%" stop-color="{theme.accent}" stop-opacity="0"/>
+                <stop offset="0%" stop-color="{isAfternoon?'rgba(255,255,255,0.5)':theme.accent}" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="{isAfternoon?'rgba(255,255,255,0)':theme.accent}" stop-opacity="0"/>
               </linearGradient>
             </defs>
             <path d={sparklineArea(hourlyToday, 320, 60)} fill="url(#sparkG)"/>
-            <path d={sparklinePath(hourlyToday, 320, 60)} fill="none" stroke="{theme.accent}" stroke-width="2" stroke-linecap="round"/>
+            <path d={sparklinePath(hourlyToday, 320, 60)} fill="none" stroke="{isAfternoon?'rgba(255,255,255,0.9)':theme.accent}" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <div class="spark-labels">
             {#each hourlyToday.filter((_,i) => i % 4 === 0) as pt}
@@ -734,12 +732,7 @@
   :global(*, *::before, *::after) { box-sizing: border-box; margin: 0; padding: 0; }
   :global(body) { font-family: 'Outfit', sans-serif; background: #080c14; -webkit-font-smoothing: antialiased; }
 
-  /* ── App ── */
-  .app {
-    min-height: 100vh; position: relative; overflow: hidden;
-    transition: background 2s ease;
-    color: var(--text-primary);
-  }
+  .app { min-height: 100vh; position: relative; overflow: hidden; transition: background 2s ease; color: var(--text-primary); }
 
   /* ── Orbs ── */
   .orb { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; animation: floatOrb 18s ease-in-out infinite; }
@@ -748,9 +741,57 @@
   .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, var(--orb3) 0%, transparent 70%); top: 40%; right: 5%; animation-duration: 22s; }
   @keyframes floatOrb { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(25px,-35px) scale(1.05)} 66%{transform:translate(-20px,25px) scale(0.95)} }
 
-  .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 250px; }
+  .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 250px; }
 
-  /* ── Sun rays (morning/dawn) ── */
+  /* ════════════════════════════════
+     AFTERNOON: sky + clouds
+  ════════════════════════════════ */
+  .aft-sun-halo {
+    position: fixed;
+    top: -30vh; left: 50%;
+    transform: translateX(-50%);
+    width: 80vw; height: 80vw;
+    max-width: 600px; max-height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,240,0.55) 0%, rgba(255,240,180,0.2) 35%, transparent 70%);
+    z-index: 0; pointer-events: none;
+    animation: haloPulse 8s ease-in-out infinite;
+  }
+  @keyframes haloPulse { 0%,100%{opacity:.8;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.06)} }
+
+  .clouds-stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .cloud-wrap {
+    position: absolute;
+    /* start off-screen to the right, animate leftward */
+    animation: cloudDrift linear infinite;
+    /* initial x set via JS animation-delay trick — clouds start at varied positions */
+    right: -400px;
+    will-change: transform;
+  }
+
+  /* Each cloud drifts right-to-left across the full screen + cloud width */
+  @keyframes cloudDrift {
+    0%   { transform: translateX(calc(100vw + 400px)); }
+    100% { transform: translateX(-500px); }
+  }
+
+  .aft-bottom-fade {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(13,95,160,0.7) 0%, rgba(26,140,199,0.3) 50%, transparent 100%);
+  }
+
+  /* ── Morning rays ── */
   .sun-rays { position: fixed; top: -40%; left: 50%; transform: translateX(-50%); width: 100vw; height: 180%; z-index: 0; pointer-events: none; }
   .ray { position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background: linear-gradient(to bottom, rgba(255,220,100,0.12), transparent 60%); transform-origin: top center; animation: rayPulse 6s ease-in-out infinite; }
   @keyframes rayPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
@@ -760,7 +801,7 @@
   .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{opacity:.1} 50%{opacity:.85} }
 
-  /* ── Horizon glow (evening) ── */
+  /* ── Evening ── */
   .horizon-glow { position: fixed; bottom: 0; left: 0; right: 0; height: 35vh; z-index: 0; pointer-events: none; background: linear-gradient(to top, rgba(249,202,36,0.18), rgba(230,81,0,0.1), transparent); }
 
   /* ── Rain ── */
@@ -779,16 +820,16 @@
   @keyframes pulseDot  { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.3);opacity:1} }
   .state-title { font-size: 1.05rem; font-weight: 500; color: var(--text-secondary); }
   .state-sub   { font-size: 0.78rem; font-weight: 300; color: var(--text-muted); letter-spacing: 0.05em; }
-  .err-icon    { color: #ef9a9a; margin-bottom: 0.25rem; }
-  .btn-retry   { margin-top: 0.5rem; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-secondary); padding: 0.55rem 1.8rem; border-radius: 100px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.85rem; letter-spacing: 0.04em; transition: all 0.2s; }
-  .btn-retry:hover { opacity: 0.85; }
+  .err-icon { color: #ef9a9a; margin-bottom: 0.25rem; }
+  .btn-retry { margin-top: 0.5rem; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-secondary); padding: 0.55rem 1.8rem; border-radius: 100px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.85rem; letter-spacing: 0.04em; transition: all 0.2s; }
+  .btn-retry:hover { opacity: 0.8; }
 
   /* ── Topbar ── */
   .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; animation: fadeUp 0.5s ease both; }
   .location-btn { display: flex; align-items: center; gap: 0.35rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 100px; padding: 0.38rem 0.8rem; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.78rem; color: var(--text-secondary); transition: opacity 0.2s; }
   .location-btn:hover { opacity: 0.75; }
   .topbar-right { display: flex; align-items: center; gap: 0.55rem; }
-  .time-badge   { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); opacity: 0.85; }
+  .time-badge   { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); opacity: 0.9; }
   .updated-badge { font-size: 0.66rem; font-weight: 300; color: var(--text-muted); letter-spacing: 0.04em; }
   .refresh-btn  { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.2rem; display: flex; transition: color 0.2s, transform 0.4s; }
   .refresh-btn:hover { color: var(--text-primary); transform: rotate(180deg); }
@@ -809,7 +850,7 @@
 
   /* ── Hero ── */
   .hero { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; gap: 1rem; animation: fadeUp 0.55s 0.05s ease both; }
-  .hero-icon { flex-shrink: 0; filter: drop-shadow(0 12px 32px rgba(0,0,0,0.2)); }
+  .hero-icon { flex-shrink: 0; filter: drop-shadow(0 12px 32px rgba(0,0,0,0.15)); }
   .anim-float { animation: floatIcon 5s ease-in-out infinite; }
   @keyframes floatIcon { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-10px) rotate(1deg)} }
   .hero-info { text-align: right; }
@@ -839,7 +880,7 @@
   .spark-labels span { font-size: 0.62rem; font-weight: 300; color: var(--text-muted); }
 
   /* ── Sun arc ── */
-  .sun-pct  { font-size: 0.72rem; font-weight: 300; color: rgba(255,200,80,0.6); }
+  .sun-pct  { font-size: 0.72rem; font-weight: 300; color: rgba(255,200,80,0.65); }
   .sun-times { display: flex; justify-content: space-between; padding: 0 0.25rem; }
   .sun-time  { display: flex; align-items: center; gap: 0.4rem; }
   .sun-time > div { display: flex; flex-direction: column; }
@@ -855,7 +896,7 @@
   .fc-card:hover { opacity: 0.85; transform: translateY(-2px); }
   .fc-day   { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
   .fc-dt    { font-size: 0.7rem; font-weight: 300; color: var(--text-muted); }
-  .fc-icon  { margin: 0.55rem 0 0.2rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
+  .fc-icon  { margin: 0.55rem 0 0.2rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15)); }
   .fc-label { font-size: 0.74rem; font-weight: 300; color: var(--text-secondary); }
   .fc-uv    { font-size: 0.68rem; font-weight: 400; margin-top: 0.1rem; }
   .fc-temps { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.55rem; }
@@ -871,7 +912,7 @@
   .hist-date { display: flex; flex-direction: column; }
   .hist-wd   { font-size: 0.62rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
   .hist-md   { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); }
-  .hist-ico  { filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+  .hist-ico  { filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15)); }
   .hist-cond { font-size: 0.76rem; font-weight: 300; color: var(--text-muted); }
   .hist-bar-group { display: flex; align-items: center; gap: 0.38rem; }
   .hist-lo-val { font-size: 0.7rem; font-weight: 400; color: rgba(80,160,255,0.7); width: 22px; text-align: right; }
