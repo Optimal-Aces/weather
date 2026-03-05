@@ -21,7 +21,7 @@
     isDay: number;
   }
 
-  interface HourlyPoint { hour: number; temp: number; }
+  interface HourlyPoint { hour: number; temp: number; weatherCode: number; isDay: number; }
 
   let current: DayWeather | null = null;
   let forecast: DayWeather[] = [];
@@ -29,6 +29,7 @@
   let hourlyToday: HourlyPoint[] = [];
   let loading = true;
   let error = '';
+  let historyOpen = false;
   let lastUpdated = '';
   let timeOfDay: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night' = 'morning';
 
@@ -52,14 +53,14 @@
     morning: {
       bg: 'linear-gradient(160deg, #ffecd2 0%, #fcb69f 30%, #ffeaa7 60%, #dff9fb 100%)',
       orb1: 'rgba(255,180,100,0.3)', orb2: 'rgba(255,220,120,0.25)', orb3: 'rgba(255,255,200,0.2)',
-      textPrimary: '#2d1b00', textSecondary: 'rgba(60,30,0,0.65)', textMuted: 'rgba(80,40,0,0.45)',
+      textPrimary: '#2d1b00', textSecondary: 'rgba(60,30,0,0.75)', textMuted: 'rgba(80,40,0,0.6)',
       cardBg: 'rgba(255,255,255,0.35)', cardBorder: 'rgba(255,180,80,0.25)', pillBg: 'rgba(255,255,255,0.35)',
       accent: '#e67e00', tempColor: '#2d1b00', label: 'Morning',
     },
     afternoon: {
       bg: 'linear-gradient(180deg, #74c8f5 0%, #3aaee0 30%, #1a8cc7 60%, #0d5fa0 100%)',
       orb1: 'rgba(255,255,255,0.18)', orb2: 'rgba(100,200,255,0.15)', orb3: 'rgba(20,120,200,0.2)',
-      textPrimary: '#ffffff', textSecondary: 'rgba(220,245,255,0.75)', textMuted: 'rgba(180,230,255,0.5)',
+      textPrimary: '#fff8ee', textSecondary: 'rgba(220,245,255,0.75)', textMuted: 'rgba(180,230,255,0.5)',
       cardBg: 'rgba(255,255,255,0.18)', cardBorder: 'rgba(255,255,255,0.28)', pillBg: 'rgba(255,255,255,0.18)',
       accent: '#ffffff', tempColor: '#ffffff', label: 'Afternoon',
     },
@@ -210,7 +211,7 @@
 
       const [histRes, foreRes] = await Promise.all([
         fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${LAT}&longitude=${LON}&start_date=${startHistory}&end_date=${todayStr}&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max,uv_index_max,sunrise,sunset&hourly=relativehumidity_2m&timezone=Asia%2FManila`),
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max,uv_index_max,sunrise,sunset&hourly=temperature_2m,relativehumidity_2m,apparent_temperature&current_weather=true&timezone=Asia%2FManila&forecast_days=3`)
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max,uv_index_max,sunrise,sunset&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,weathercode,is_day&current_weather=true&timezone=Asia%2FManila&forecast_days=3`)
       ]);
       if (!histRes.ok) throw new Error(`History API ${histRes.status}`);
       if (!foreRes.ok) throw new Error(`Forecast API ${foreRes.status}`);
@@ -238,9 +239,9 @@
       };
 
       hourlyToday = hourlyTimes
-        .map((t, i) => ({ t, temp: Math.round(fd.hourly.temperature_2m[i]) }))
+        .map((t, i) => ({ t, temp: Math.round(fd.hourly.temperature_2m[i]), weatherCode: fd.hourly.weathercode[i] ?? 0, isDay: fd.hourly.is_day?.[i] ?? 1 }))
         .filter(({ t }) => t.startsWith(todayStr))
-        .map(({ t, temp }) => ({ hour: new Date(t).getHours(), temp }));
+        .map(({ t, temp, weatherCode, isDay }) => ({ hour: new Date(t).getHours(), temp, weatherCode, isDay }));
 
       forecast = fd.daily.time.slice(1, 3).map((date: string, i: number) => ({
         date, tempMax: Math.round(fd.daily.temperature_2m_max[i+1]),
@@ -600,28 +601,87 @@
         </div>
       </div>
 
-      <!-- SPARKLINE -->
-      {#if hourlyToday.length > 1}
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Today's Temperature</span>
-            <span class="spark-range">{Math.min(...hourlyToday.map(h=>h.temp))}° – {Math.max(...hourlyToday.map(h=>h.temp))}°C</span>
-          </div>
-          <svg viewBox="0 0 320 60" preserveAspectRatio="none" width="100%" height="60">
-            <defs>
-              <linearGradient id="sparkG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="{isAfternoon?'rgba(255,255,255,0.5)':theme.accent}" stop-opacity="0.4"/>
-                <stop offset="100%" stop-color="{isAfternoon?'rgba(255,255,255,0)':theme.accent}" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d={sparklineArea(hourlyToday, 320, 60)} fill="url(#sparkG)"/>
-            <path d={sparklinePath(hourlyToday, 320, 60)} fill="none" stroke="{isAfternoon?'rgba(255,255,255,0.9)':theme.accent}" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <div class="spark-labels">
-            {#each hourlyToday.filter((_,i) => i % 4 === 0) as pt}
-              <span>{pt.hour===0?'12a':pt.hour<12?pt.hour+'a':pt.hour===12?'12p':(pt.hour-12)+'p'}</span>
-            {/each}
-          </div>
+      <!-- HOURLY FORECAST (next 6 hours) -->
+      {#if hourlyToday.length > 0}
+        {@const nowHour = new Date().getHours()}
+        {@const next6 = hourlyToday.filter(h => h.hour >= nowHour && h.hour < nowHour + 6)}
+        <div class="block-label">Next 6 Hours</div>
+        <div class="card hourly-card">
+          {#each next6 as h, i}
+            {@const isNow = h.hour === new Date().getHours()}
+            <div class="hourly-row" class:hourly-now={isNow} style="animation-delay:{i*0.03}s">
+              <!-- Time -->
+              <span class="h-time" class:h-time-now={isNow}>
+                {isNow ? 'Now' : h.hour === 0 ? '12 AM' : h.hour < 12 ? h.hour + ' AM' : h.hour === 12 ? '12 PM' : (h.hour - 12) + ' PM'}
+              </span>
+
+              <!-- Mini SVG icon -->
+              <div class="h-icon">
+                {#if getWeatherType(h.weatherCode) === 'clear' && h.isDay}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <defs><radialGradient id="hsg{i}"><stop offset="0%" stop-color="#fff9c4"/><stop offset="100%" stop-color="#fb8c00"/></radialGradient></defs>
+                    {#each Array(8) as _,j}<line x1="14" y1="4" x2="14" y2="2" stroke="#ffd54f" stroke-width="1.5" stroke-linecap="round" transform="rotate({j*45} 14 14)"/>{/each}
+                    <circle cx="14" cy="14" r="6" fill="url(#hsg{i})"/>
+                  </svg>
+                {:else if getWeatherType(h.weatherCode) === 'clear' && !h.isDay}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <defs><radialGradient id="hmg{i}" cx="40%" cy="40%" r="55%"><stop offset="0%" stop-color="#fffde7"/><stop offset="100%" stop-color="#f9a825"/></radialGradient></defs>
+                    <path d="M14 7 A7 7 0 1 0 14 21 A5 5 0 1 1 14 7Z" fill="url(#hmg{i})"/>
+                  </svg>
+                {:else if getWeatherType(h.weatherCode) === 'partly-cloudy'}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <circle cx="10" cy="13" r="6" fill="#ffb300" opacity="0.9"/>
+                    <ellipse cx="19" cy="17" rx="7" ry="5" fill="#cfd8dc"/>
+                    <ellipse cx="13" cy="19" rx="5" ry="4" fill="#eceff1"/>
+                    <ellipse cx="16" cy="15" rx="6" ry="5" fill="white" opacity="0.9"/>
+                  </svg>
+                {:else if getWeatherType(h.weatherCode) === 'rain' || getWeatherType(h.weatherCode) === 'drizzle'}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <ellipse cx="17" cy="11" rx="9" ry="6" fill="#546e7a" opacity="0.7"/>
+                    <ellipse cx="11" cy="14" rx="6" ry="4" fill="#607d8b"/>
+                    <ellipse cx="14" cy="10" rx="7" ry="5" fill="#78909c"/>
+                    {#each [[8,21],[13,24],[18,21]] as [x,y]}
+                      <ellipse cx={x} cy={y} rx="1.8" ry="3.5" fill="#64b5f6" opacity="0.85"/>
+                    {/each}
+                  </svg>
+                {:else if getWeatherType(h.weatherCode) === 'thunder'}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <ellipse cx="17" cy="11" rx="9" ry="6" fill="#37474f"/>
+                    <ellipse cx="10" cy="14" rx="6" ry="4" fill="#263238"/>
+                    <polygon points="14,17 10,24 13,24 9,30 19,22 15,22 17,17" fill="#ffd600"/>
+                  </svg>
+                {:else if getWeatherType(h.weatherCode) === 'snow'}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <ellipse cx="17" cy="11" rx="9" ry="6" fill="#b0bec5"/>
+                    <ellipse cx="11" cy="14" rx="6" ry="4" fill="#cfd8dc"/>
+                    {#each [[8,21],[14,24],[20,21]] as [x,y]}
+                      <g transform="translate({x},{y})"><line x1="-4" y1="0" x2="4" y2="0" stroke="white" stroke-width="1.5"/><line x1="0" y1="-4" x2="0" y2="4" stroke="white" stroke-width="1.5"/></g>
+                    {/each}
+                  </svg>
+                {:else}
+                  <svg viewBox="0 0 28 28" width="26" height="26">
+                    <ellipse cx="17" cy="13" rx="9" ry="6" fill="#90a4ae" opacity="0.7"/>
+                    <ellipse cx="11" cy="16" rx="6" ry="4" fill="#b0bec5"/>
+                    <ellipse cx="14" cy="12" rx="7" ry="5" fill="#cfd8dc" opacity="0.95"/>
+                  </svg>
+                {/if}
+              </div>
+
+              <!-- Condition label -->
+              <span class="h-cond">{getWeatherLabel(h.weatherCode)}</span>
+
+              <!-- Temp bar + value -->
+              <div class="h-right">
+                <div class="h-bar-track">
+                  <div class="h-bar-fill" style="width:{Math.min(100,Math.max(8,((h.temp-15)/25)*100))}%"></div>
+                </div>
+                <span class="h-temp" class:h-temp-now={isNow}>{h.temp}°</span>
+              </div>
+            </div>
+            {#if i < next6.length - 1}
+              <div class="h-divider"></div>
+            {/if}
+          {/each}
         </div>
       {/if}
 
@@ -691,11 +751,19 @@
         {/each}
       </div>
 
-      <!-- HISTORY -->
-      <div class="block-label">Past 7 Days</div>
-      <div class="hist-list">
-        {#each history as d, i}
-          <div class="hist-row" style="animation-delay:{i*0.05}s">
+      <!-- HISTORY (collapsible) -->
+      <button class="hist-toggle" on:click={() => historyOpen = !historyOpen}>
+        <span class="block-label" style="margin:0">Past 7 Days</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+          style="transform:rotate({historyOpen?'180':'0'}deg);transition:transform 0.3s ease;opacity:0.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      {#if historyOpen}
+        <div class="hist-list">
+          {#each history as d, i}
+            <div class="hist-row" style="animation-delay:{i*0.05}s">
             <div class="hist-date">
               <span class="hist-wd">{formatDate(d.date, { weekday: 'short' })}</span>
               <span class="hist-md">{formatDate(d.date, { month: 'short', day: 'numeric' })}</span>
@@ -721,7 +789,8 @@
             </div>
           </div>
         {/each}
-      </div>
+        </div>
+      {/if}
 
       <div class="credit">Open-Meteo · Free & open source</div>
     {/if}
@@ -869,7 +938,7 @@
   .pill  { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.28rem; padding: 0.8rem 0.4rem; background: var(--pill-bg); border: 1px solid var(--card-border); border-radius: 16px; color: var(--text-muted); transition: opacity 0.2s; }
   .pill:hover { opacity: 0.8; }
   .pill-val  { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
-  .pill-lbl  { font-size: 0.6rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
+  .pill-lbl  { font-size: 0.6rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; color: var(--text-secondary); }
 
   /* ── Cards ── */
   .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.1rem 1.15rem; margin-bottom: 1rem; animation: fadeUp 0.5s 0.12s ease both; }
@@ -922,6 +991,87 @@
 
   /* ── Credit ── */
   .credit { text-align: center; margin-top: 2rem; font-size: 0.64rem; font-weight: 300; color: var(--text-muted); letter-spacing: 0.06em; opacity: 0.6; }
+
+  /* ── Hourly Forecast ── */
+  .hourly-card { padding: 0.35rem 0; margin-bottom: 1rem; }
+  .hourly-row {
+    display: grid;
+    grid-template-columns: 52px 28px 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: 12px;
+    transition: background 0.18s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .hourly-row:hover { background: rgba(255,255,255,0.06); }
+  .hourly-now {
+    background: rgba(255,255,255,0.09) !important;
+    border-radius: 12px;
+  }
+  .h-time {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .h-time-now {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .h-icon { filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); flex-shrink: 0; }
+  .h-cond {
+    font-size: 0.76rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .h-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  .h-bar-track {
+    width: 44px; height: 3px;
+    background: rgba(128,128,128,0.15);
+    border-radius: 2px; overflow: hidden;
+  }
+  .h-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4fc3f7, #ffb74d);
+    border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+  .h-temp {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    min-width: 30px;
+    text-align: right;
+  }
+  .h-temp-now {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .h-divider {
+    height: 1px;
+    background: var(--card-border);
+    margin: 0 1.1rem;
+    opacity: 0.5;
+  }
+
+  /* ── History toggle ── */
+  .hist-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; background: none; border: none; cursor: pointer;
+    padding: 0 2px; margin-bottom: 0.8rem;
+    font-family: 'Outfit', sans-serif; color: var(--text-primary);
+  }
+  .hist-toggle:hover { opacity: 0.75; }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 </style>
